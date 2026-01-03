@@ -4,7 +4,7 @@ from pygame.key import get_pressed
 import gamesettings as gs
 
 class Character(pygame.sprite.Sprite):
-    def __init__(self, game):
+    def __init__(self, game, image_dict):
         super().__init__()
         self.GAME = game
 
@@ -16,9 +16,14 @@ class Character(pygame.sprite.Sprite):
         self.alive = True
         self.speed = 3
 
+        #Character action
+        self.action = "walk_left"
+
         # Character Display
-        self.image = None
-        self.rect = pygame.Rect(self.x, self.y, gs.SIZE, gs.SIZE)
+        self.index = 0
+        self.image_dict = image_dict
+        self.image = self.image_dict[self.action][self.index]
+        self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
     def input(self):
         for event in pygame.event.get():
@@ -46,4 +51,5 @@ class Character(pygame.sprite.Sprite):
         pass
 
     def draw(self, window):
-        pygame.draw.rect(window, gs.RED, self.rect)
+        window.blit(self.image, self.rect)
+        pygame.draw.rect(window, gs.RED, self.rect, 1)
