@@ -1,6 +1,7 @@
 import pygame
 import gamesettings as gs
 from assets import Assets
+from game import Game
 
 class BomberMan:
     def __init__(self):
@@ -10,20 +11,24 @@ class BomberMan:
         pygame.display.set_caption("BomberMan")
 
         self.ASSETS = Assets()
+        self.GAME = Game(self, self.ASSETS)
         self.FPS = pygame.time.Clock()
 
         self.run = True
 
     def input(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.run = False
+        #for event in pygame.event.get():
+         #   if event.type == pygame.QUIT:
+          #      self.run = False
+            self.GAME.input()
 
     def update(self):
         self.FPS.tick(gs.FPS)
+        self.GAME.update()
 
     def draw(self, window):
         window.fill(gs.BLACK)
+        self.GAME.draw(window)
         pygame.display.update()
 
 
