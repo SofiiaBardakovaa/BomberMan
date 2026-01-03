@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="Images">
-      <change afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
+    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="Game class added">
+      <change afterPath="$PROJECT_DIR$/character.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamesettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/gamesettings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -220,13 +221,22 @@
       <option name="project" value="LOCAL" />
       <updated>1767473751772</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Game class added">
+      <option name="closed" value="true" />
+      <created>1767474399613</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1767474399613</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Basic settings" />
     <MESSAGE value="Assets class added" />
     <MESSAGE value="Images" />
-    <option name="LAST_COMMIT_MESSAGE" value="Images" />
+    <MESSAGE value="Game class added" />
+    <option name="LAST_COMMIT_MESSAGE" value="Game class added" />
   </component>
 </project>
