@@ -1,5 +1,6 @@
 import pygame
 import gamesettings as gs
+from assets import Assets
 
 class BomberMan:
     def __init__(self):
@@ -8,6 +9,7 @@ class BomberMan:
         self.screen = pygame.display.set_mode((gs.SCREENWIDTH, gs.SCREENHEIGHT))
         pygame.display.set_caption("BomberMan")
 
+        self.ASSETS = Assets()
         self.FPS = pygame.time.Clock()
 
         self.run = True
@@ -23,6 +25,7 @@ class BomberMan:
     def draw(self, window):
         window.fill(gs.BLACK)
         pygame.display.update()
+
 
     def rungame(self):
         while self.run == True:
