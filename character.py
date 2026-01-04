@@ -40,6 +40,10 @@ class Character(pygame.sprite.Sprite):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.GAME.MAIN.run = False
+                elif event.key == pygame.K_SPACE:
+                    row, col = ((self.rect.centery - gs.Y_OFFSET)//gs.SIZE, self.rect.centerx // self.size)
+                    if self.GAME.level_matrix[row][col] == "_":
+                        Bomb(self.GAME, self.GAME.ASSETS.bomb["bomb"], self.GAME.groups["bomb"], row, col, gs.SIZE)
 
         keys_pressed = pygame.key.get_pressed()
         if keys_pressed[pygame.K_d] or keys_pressed[pygame.K_RIGHT]:
@@ -150,3 +154,57 @@ class Character(pygame.sprite.Sprite):
             self.y = top_y
         elif self.y > bottom_y:
             self.y = bottom_y
+
+class Bomb(pygame.sprite.Sprite):
+    def __init__(self, game, image_list, group, row_num, col_num, size):
+        super().__init__(group)
+        self.GAME = game
+
+        #Level matrix pos
+        self.row = row_num
+        self.col = col_num
+
+        #Coord
+        self.size = size
+        self.x = self.col * self.size
+        self.y = (self.row * self.size) + gs.Y_OFFSET
+
+        #Bobmb attribs
+        self.bomb_counter = 1
+        self.bomb_timer = 12
+
+        #image
+        self.index = 0
+        self.image_list = image_list
+        self.image = self.image_list[self.index]
+        self.rect = self.image.get_rect(topleft=(self.x, self.y))
+
+        #Anim settings
+        self.anim_length = len(self.image_list)
+        self.anim_frame_time = 200
+        self.anim_timer = pygame.time.get_ticks()
+
+        self.insert_bomb_into_grid()
+
+    def update(self):
+        self.animation()
+
+    def draw(self, window, offset):
+        window.blit(self.image, (self.rect.x - offset, self.rect.y))
+
+    def insert_bomb_into_grid(self):
+        """Adds the bomb obj into the level matrix"""
+        self.GAME.level_matrix[self.row][self.col] = self
+        for row in self.GAME.level_matrix:
+            print(row)
+        print()
+
+    def animation(self):
+        if pygame.time.get_ticks() - self.anim_timer >= self.anim_frame_time:
+            self.index += 1
+            self.index = self.index % self.anim_length
+            self.image = self.image_list[self.index]
+            self.anim_timer = pygame.time.get_ticks()
+
+    def __repr__(self):
+        return "'!'"

@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="Collision detection and navigation through the game area">
+    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="Camera movement">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/blocks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/character.py" beforeDir="false" afterPath="$PROJECT_DIR$/character.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamesettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/gamesettings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +54,7 @@
     "Python.blocks.executor": "Run",
     "Python.character.executor": "Run",
     "Python.game.executor": "Run",
+    "Python.gamesettings.executor": "Run",
     "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -297,7 +300,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767542887474</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Camera movement">
+      <option name="closed" value="true" />
+      <created>1767545816385</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1767545816385</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -313,6 +324,7 @@
     <MESSAGE value="Created the soft blocks class" />
     <MESSAGE value="Refactored the code and changed background color" />
     <MESSAGE value="Collision detection and navigation through the game area" />
-    <option name="LAST_COMMIT_MESSAGE" value="Collision detection and navigation through the game area" />
+    <MESSAGE value="Camera movement" />
+    <option name="LAST_COMMIT_MESSAGE" value="Camera movement" />
   </component>
 </project>

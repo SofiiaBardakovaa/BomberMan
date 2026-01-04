@@ -1,5 +1,3 @@
-from xml.dom.domreg import well_known_implementations
-
 import pygame
 from character import Character
 from blocks import Hard_Block, Soft_Block
@@ -20,7 +18,10 @@ class Game:
         #Groups
         # self.hard_blocks = pygame.sprite.Group()
         # self.soft_blocks = pygame.sprite.Group()
-        self.groups = {"hard_block": pygame.sprite.Group(), "soft_block": pygame.sprite.Group(), "player": pygame.sprite.Group()}
+        self.groups = {"hard_block": pygame.sprite.Group(),
+                       "soft_block": pygame.sprite.Group(),
+                       "bomb": pygame.sprite.Group(),
+                       "player": pygame.sprite.Group()}
 
         self.player = Character(self, self.ASSETS.player_char, self.groups["player"], 3, 2, gs.SIZE)
 
@@ -72,6 +73,7 @@ class Game:
         self.insert_soft_blocks_into_matrix(matrix)
         for row in matrix:
             print(row)
+        print()
         return matrix
 
     def insert_hard_blocks_into_matrix(self, matrix):

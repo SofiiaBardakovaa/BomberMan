@@ -9,6 +9,7 @@ class Assets:
         self.hard_block = self.load_sprite_range(gs.HARD_BLOCK, self.spritesheet)
         self.soft_block = self.load_sprite_range(gs.SOFT_BLOCK, self.spritesheet)
         self.background = self.load_sprite_range(gs.BACKGROUND, self.spritesheet)
+        self.bomb = self.load_sprite_range(gs.BOMB, self.spritesheet)
 
     def load_sprite_sheet(self, path, filename, width, height):
         """Load in the sprite sheet image and resize it"""

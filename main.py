@@ -33,7 +33,7 @@ class BomberMan:
 
 
     def rungame(self):
-        while self.run == True:
+        while self.run:
             self.input()
             self.update()
             self.draw(self.screen)
