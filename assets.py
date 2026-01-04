@@ -10,6 +10,10 @@ class Assets:
         self.soft_block = self.load_sprite_range(gs.SOFT_BLOCK, self.spritesheet)
         self.background = self.load_sprite_range(gs.BACKGROUND, self.spritesheet)
         self.bomb = self.load_sprite_range(gs.BOMB, self.spritesheet)
+        self.explosions = self.load_sprite_range(gs.EXPLOSIONS, self.spritesheet)
+        for image_list in ["right_end", "right_mid", "down_end", "down_mid"]:
+            self.rotate_images_in_list(self.explosions[image_list], 180)
+
 
     def load_sprite_sheet(self, path, filename, width, height):
         """Load in the sprite sheet image and resize it"""
@@ -37,3 +41,8 @@ class Assets:
                 animation_images[animation].append(image)
         return animation_images
 
+    def rotate_images_in_list(self, image_list, rotation):
+        """Cycle through the image list and rotate each of the images"""
+        for ind, image, in enumerate(image_list):
+            image = pygame.transform.rotate(image, rotation)
+            image_list[ind] = image
