@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="Character animation created">
-      <change afterPath="$PROJECT_DIR$/blocks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets.py" afterDir="false" />
+    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="Creating the blocks and hard blocks class">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/blocks.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gamesettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/gamesettings.py" afterDir="false" />
     </list>
@@ -53,6 +53,7 @@
     "Python.game.executor": "Run",
     "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "master"
   }
@@ -263,7 +264,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767485051852</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Creating the blocks and hard blocks class">
+      <option name="closed" value="true" />
+      <created>1767487815548</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1767487815548</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -275,6 +284,7 @@
     <MESSAGE value="Moving the Player Character" />
     <MESSAGE value="Character image" />
     <MESSAGE value="Character animation created" />
-    <option name="LAST_COMMIT_MESSAGE" value="Character animation created" />
+    <MESSAGE value="Creating the blocks and hard blocks class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Creating the blocks and hard blocks class" />
   </component>
 </project>

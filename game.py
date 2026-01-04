@@ -1,6 +1,9 @@
+from xml.dom.domreg import well_known_implementations
+
 import pygame
 from character import Character
-from blocks import Hard_Block
+from blocks import Hard_Block, Soft_Block
+from random import choice
 import gamesettings as gs
 
 class Game:
@@ -13,6 +16,7 @@ class Game:
 
         #Groups
         self.hard_blocks = pygame.sprite.Group()
+        self.soft_blocks = pygame.sprite.Group()
 
         #Level Information
         self.level = 1
@@ -31,10 +35,15 @@ class Game:
 
     def update(self):
         self.hard_blocks.update()
+        self.soft_blocks.update()
         self.player.update()
 
     def draw(self, window):
+        for row_num, row in enumerate(self.level_matrix):
+            for col_num, col in enumerate(row):
+                window.blit(self.ASSETS.background["background"][0], ((col_num * gs.SIZE), (row_num * gs.SIZE) + gs.Y_OFFSET))
         self.hard_blocks.draw(window)
+        self.soft_blocks.draw(window)
         self.player.draw(window)
 
     def generate_level_matrix(self, rows, cols):
@@ -46,6 +55,7 @@ class Game:
                 line.append("_")
             matrix.append(line)
         self.insert_hard_blocks_into_matrix(matrix)
+        self.insert_soft_blocks_into_matrix(matrix)
         for row in matrix:
             print(row)
         return matrix
@@ -54,7 +64,26 @@ class Game:
         """Insert all the Hard Barrier Blocks into the level matrix"""
         for row_num, row in enumerate(matrix):
             for col_num, col in enumerate(row):
-                if row_num == 0 or row_num == len(matrix)-1 or col_num == 0 or col_num == len(row)-1 or (row_num % 2 == 0 and col_num % 2 == 0):
+                if row_num == 0 or row_num == len(matrix)-1 or \
+                        col_num == 0 or col_num == len(row)-1 or \
+                        (row_num % 2 == 0 and col_num % 2 == 0):
                     matrix[row_num][col_num] = Hard_Block(self, self.ASSETS.hard_block["hard_block"], self.hard_blocks, row_num, col_num, gs.SIZE)
+        return
+
+    def insert_soft_blocks_into_matrix(self, matrix):
+        """Randomly insert soft blocks into the level matrix"""
+        for row_num, row in enumerate(matrix):
+            for col_num, col in enumerate(row):
+                if row_num == 0 or row_num == len(matrix) - 1 or \
+                        col_num == 0 or col_num == len(row) - 1 or \
+                        (row_num % 2 == 0 and col_num % 2 == 0):
+                    continue
+                elif row_num in [2, 3, 4] and col_num in [1, 2, 3]:
+                    continue
+                else:
+                    cell = choice(["@", "_", "_", "_"])
+                    if cell == "@":
+                        cell = Soft_Block(self, self.ASSETS.soft_block["soft_block"], self.soft_blocks, row_num, col_num, gs.SIZE)
+                    matrix[row_num][col_num] = cell
         return
 

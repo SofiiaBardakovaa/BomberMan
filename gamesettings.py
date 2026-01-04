@@ -5,8 +5,10 @@ SCREENWIDTH = 1290
 SCREENHEIGHT = 892
 
 # Game Frames per Second
-
 FPS = 60
+
+# Y coordinates Offset
+Y_OFFSET = 92
 
 # Colours
 
