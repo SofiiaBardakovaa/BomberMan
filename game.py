@@ -1,5 +1,6 @@
 import pygame
 from character import Character
+from enemy import Enemy
 from blocks import Hard_Block, Soft_Block
 from random import choice
 import gamesettings as gs
@@ -22,10 +23,11 @@ class Game:
                        "soft_block": pygame.sprite.Group(),
                        "bomb": pygame.sprite.Group(),
                        "explosions": pygame.sprite.Group(),
+                       "enemies": pygame.sprite.Group(),
                        "player": pygame.sprite.Group()}
 
         self.player = Character(self, self.ASSETS.player_char, self.groups["player"], 3, 2, gs.SIZE)
-
+        self.ballom_enemy = Enemy(self, self.ASSETS.ballom, self.groups["enemies"], 5, 5, gs.SIZE)
         #Level Information
         self.level = 1
         self.level_matrix = self.generate_level_matrix(gs.ROWS, gs.COLS)

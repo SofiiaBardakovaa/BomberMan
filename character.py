@@ -300,20 +300,17 @@ class Explosion(pygame.sprite.Sprite):
                     continue
                 if self.GAME.level_matrix[dir[0]][dir[1]] == "_":
                     if power_cell == self.power - 1:
-                        print(f"explode {dir[0], dir[1]}, end_piece")
                         FireBall(self.image_dict[dir[4]], self.GAME.groups["explosions"], dir[0], dir[1], gs.SIZE)
                     elif self.GAME.level_matrix[dir[2]][dir[3]] in self.GAME.groups["hard_block"].sprites():
-                        print(f"explode {dir[0], dir[1]}, end_piece")
                         FireBall(self.image_dict[dir[4]], self.GAME.groups["explosions"], dir[0], dir[1], gs.SIZE)
                         valid_directions[ind] = False
                     else:
                         FireBall(self.image_dict[dir[5]], self.GAME.groups["explosions"], dir[0], dir[1], gs.SIZE)
-                        print(f"explode {dir[0], dir[1]}, mid flame")
                 elif self.GAME.level_matrix[dir[0]][dir[1]] in self.GAME.groups["bomb"].sprites():
                     self.GAME.level_matrix[dir[0]][dir[1]].explode()
                     valid_directions[ind] = False
                 elif self.GAME.level_matrix[dir[0]][dir[1]] in self.GAME.groups["soft_block"].sprites():
-                    print(f"explode {dir[0], dir[1]}, destroy soft block")
+                    self.GAME.level_matrix[dir[0]][dir[1]].destroy_soft_block()
                     valid_directions[ind] = False
                 else:
                     valid_directions[ind] = False

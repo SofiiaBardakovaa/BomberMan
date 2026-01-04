@@ -41,5 +41,27 @@ class Hard_Block(Blocks):
 class Soft_Block(Blocks):
     def __init__(self, game, images, group, row_num, col_num, size):
         super().__init__(game, images, group, row_num, col_num, size)
+
+        self.anim_timer = pygame.time.get_ticks()
+        self.anim_frame_time = 50
+
+        self.destroyed = False
+
+    def update(self):
+        if self.destroyed:
+            if pygame.time.get_ticks() - self.anim_timer >= self.anim_frame_time:
+                self.image_index += 1
+                if self.image_index >= len(self.image_list) - 1:
+                    self.kill()
+                self.image = self.image_list[self.image_index]
+                self.anim_timer = pygame.time.get_ticks()
+
+    def destroy_soft_block(self):
+        """If soft block has been destroyed change the destroyed boolean to True and set the timer"""
+        if not self.destroyed:
+            self.anim_timer = pygame.time.get_ticks()
+            self.destroyed = True
+            self.GAME.level_matrix[self.row][self.col] = "_"
+
     def __repr__(self):
         return "'@'"
