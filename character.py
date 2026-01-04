@@ -87,4 +87,63 @@ class Character(pygame.sprite.Sprite):
 
         self.animate(action)
 
+        self.snap_to_grid(action)
+
+        self.play_area_restriction(64, (gs.COLS - 1) * 64, gs.Y_OFFSET + 64, ((gs.ROWS -1) * 64) + gs.Y_OFFSET)
+
         self.rect.topleft = (self.x, self.y)
+
+        self.collision_detection_items(self.GAME.groups["hard_block"])
+        self.collision_detection_items(self.GAME.groups["soft_block"])
+
+
+    def collision_detection_items(self, item_list):
+        """Check for collision between player and various items"""
+        for item in item_list:
+            if self.rect.colliderect(item) and item.passable == False:
+                if self.action == "walk_right":
+                    if self.rect.right > item.rect.left:
+                        self.rect.right = item.rect.left
+                        self.x, self.y = self.rect.topleft
+                        return
+                if self.action == "walk_left":
+                    if self.rect.left < item.rect.right:
+                        self.rect.left = item.rect.right
+                        self.x, self.y = self.rect.topleft
+                        return
+                if self.action == "walk_up":
+                    if self.rect.top < item.rect.bottom:
+                        self.rect.top = item.rect.bottom
+                        self.x, self.y = self.rect.topleft
+                        return
+                if self.action == "walk_down":
+                    if self.rect.bottom > item.rect.top:
+                        self.rect.bottom = item.rect.top
+                        self.x, self.y = self.rect.topleft
+                        return
+
+    def snap_to_grid(self, action):
+        """Snap the player to grid coord making nav easier"""
+        x_pos = self.x % gs.SIZE
+        y_pos = (self.y - gs.Y_OFFSET) % gs.SIZE
+        if action in ["walk_up", "walk_down"]:
+            if x_pos <= 12:
+                self.x = self.x - x_pos
+            if x_pos >= 52:
+                self.x = self.x + (gs.SIZE - x_pos)
+        elif action in ["walk_left", "walk_right"]:
+            if y_pos <= 12:
+                self.y = self.y - y_pos
+            if y_pos >= 52:
+                self.y = self.y + (gs.SIZE - y_pos)
+
+    def play_area_restriction(self, left_x, right_x, top_y, bottom_y):
+        """Check player coords to ensure remains within play area"""
+        if self.x < left_x:
+            self.x = left_x
+        elif self.x > right_x:
+            self.x = right_x
+        elif self.y < top_y:
+            self.y = top_y
+        elif self.y > bottom_y:
+            self.y = bottom_y
