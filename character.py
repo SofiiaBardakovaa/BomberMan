@@ -20,6 +20,8 @@ class Character(pygame.sprite.Sprite):
         #Character attributes
         self.alive = True
         self.speed = 3
+        self.bomb_limit = 1
+        self.remote = True
 
         #Character action
         self.action = "walk_left"
@@ -45,9 +47,12 @@ class Character(pygame.sprite.Sprite):
                     self.GAME.MAIN.run = False
                 elif event.key == pygame.K_SPACE:
                     row, col = ((self.rect.centery - gs.Y_OFFSET)//gs.SIZE, self.rect.centerx // self.size)
-                    if self.GAME.level_matrix[row][col] == "_":
-                        Bomb(self.GAME, self.GAME.ASSETS.bomb["bomb"], self.GAME.groups["bomb"], row, col, gs.SIZE)
-                        print(self.bombs_planted)
+                    if self.GAME.level_matrix[row][col] == "_" and self.bombs_planted < self.bomb_limit:
+                        Bomb(self.GAME, self.GAME.ASSETS.bomb["bomb"],
+                             self.GAME.groups["bomb"], row, col, gs.SIZE, self.remote)
+                elif event.key == pygame.K_LCTRL and self.remote and self.GAME.groups["bomb"]:
+                    bomb_list = self.GAME.groups["bomb"].sprites()
+                    bomb_list[-1].explode()
 
         keys_pressed = pygame.key.get_pressed()
         if keys_pressed[pygame.K_d] or keys_pressed[pygame.K_RIGHT]:
@@ -161,7 +166,7 @@ class Character(pygame.sprite.Sprite):
             self.y = bottom_y
 
 class Bomb(pygame.sprite.Sprite):
-    def __init__(self, game, image_list, group, row_num, col_num, size):
+    def __init__(self, game, image_list, group, row_num, col_num, size, remote):
         super().__init__(group)
         self.GAME = game
 
@@ -178,6 +183,7 @@ class Bomb(pygame.sprite.Sprite):
         self.bomb_counter = 1
         self.bomb_timer = 12
         self.passable = True
+        self.remote = remote
 
         #image
         self.index = 0
@@ -195,7 +201,7 @@ class Bomb(pygame.sprite.Sprite):
     def update(self):
         self.animation()
         self.planted_bomb_player_collision()
-        if self.bomb_counter == self.bomb_timer:
+        if self.bomb_counter == self.bomb_timer and not self.remote:
             self.explode()
 
 

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="Bomb animated">
+    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="Bomb explosion">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/character.py" beforeDir="false" afterPath="$PROJECT_DIR$/character.py" afterDir="false" />
     </list>
@@ -312,7 +312,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767552819644</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Bomb explosion">
+      <option name="closed" value="true" />
+      <created>1767554037411</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1767554037411</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -330,6 +338,7 @@
     <MESSAGE value="Collision detection and navigation through the game area" />
     <MESSAGE value="Camera movement" />
     <MESSAGE value="Bomb animated" />
-    <option name="LAST_COMMIT_MESSAGE" value="Bomb animated" />
+    <MESSAGE value="Bomb explosion" />
+    <option name="LAST_COMMIT_MESSAGE" value="Bomb explosion" />
   </component>
 </project>
