@@ -6,6 +6,9 @@ class Assets:
         self.spritesheet = self.load_sprite_sheet("images", "spritesheet.png", 192*4, 272*4)
 
         self.player_char = self.load_sprite_range(gs.PLAYER, self.spritesheet)
+        self.hard_block = self.load_sprite_range(gs.HARD_BLOCK, self.spritesheet)
+        self.soft_block = self.load_sprite_range(gs.SOFT_BLOCK, self.spritesheet)
+        self.background = self.load_sprite_range(gs.BACKGROUND, self.spritesheet)
 
     def load_sprite_sheet(self, path, filename, width, height):
         """Load in the sprite sheet image and resize it"""
