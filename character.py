@@ -20,9 +20,9 @@ class Character(pygame.sprite.Sprite):
         #Character attributes
         self.alive = True
         self.speed = 3
-        self.bomb_limit = 1
+        self.bomb_limit = 2
         self.remote = True
-        self.power = 1
+        self.power = 2
 
         #Character action
         self.action = "walk_left"
@@ -268,6 +268,11 @@ class Explosion(pygame.sprite.Sprite):
         self.image = self.image_dict[self.image_type][self.index]
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
+        #power
+        self.power = power
+        self.passable = False
+        self.calculate_explosive_path()
+
     def update(self):
         self.animate()
 
@@ -281,4 +286,87 @@ class Explosion(pygame.sprite.Sprite):
                 self.kill()
                 return
             self.image = self.image_dict[self.image_type][self.index]
+            self.anim_timer = pygame.time.get_ticks()
+
+    def calculate_explosive_path(self):
+        """Explode adjacent cells dependent on power and available cells"""
+        #                   left  right   up  down
+        valid_directions = [True, True, True, True]
+        for power_cell in range(self.power):
+            directions = self.calculate_direction_cells(power_cell)
+            print(directions)
+            for ind, dir in enumerate(directions):
+                if not valid_directions[ind]:
+                    continue
+                if self.GAME.level_matrix[dir[0]][dir[1]] == "_":
+                    if power_cell == self.power - 1:
+                        print(f"explode {dir[0], dir[1]}, end_piece")
+                        FireBall(self.image_dict[dir[4]], self.GAME.groups["explosions"], dir[0], dir[1], gs.SIZE)
+                    elif self.GAME.level_matrix[dir[2]][dir[3]] in self.GAME.groups["hard_block"].sprites():
+                        print(f"explode {dir[0], dir[1]}, end_piece")
+                        FireBall(self.image_dict[dir[4]], self.GAME.groups["explosions"], dir[0], dir[1], gs.SIZE)
+                        valid_directions[ind] = False
+                    else:
+                        FireBall(self.image_dict[dir[5]], self.GAME.groups["explosions"], dir[0], dir[1], gs.SIZE)
+                        print(f"explode {dir[0], dir[1]}, mid flame")
+                elif self.GAME.level_matrix[dir[0]][dir[1]] in self.GAME.groups["bomb"].sprites():
+                    self.GAME.level_matrix[dir[0]][dir[1]].explode()
+                    valid_directions[ind] = False
+                elif self.GAME.level_matrix[dir[0]][dir[1]] in self.GAME.groups["soft_block"].sprites():
+                    print(f"explode {dir[0], dir[1]}, destroy soft block")
+                    valid_directions[ind] = False
+                else:
+                    valid_directions[ind] = False
+                    continue
+
+
+    def calculate_direction_cells(self, cell):
+        """Return a list of the 4 sells in the up down left right directions"""
+        left = (self.row_num, self.col_num - (cell + 1),  # check immediate left
+                self.row_num, self.col_num - (cell + 2),  # check cell left of that
+                "left_end", "left_mid")
+        right = (self.row_num, self.col_num + (cell + 1),  # check immediate right
+                self.row_num, self.col_num + (cell + 2),  # check cell right of that
+                "right_end", "right_mid")
+        up = (self.row_num - (cell +1), self.col_num,  # check immediate up
+                self.row_num - (cell +2), self.col_num,  # check cell up of that
+                "up_end", "up_mid")
+        down = (self.row_num + (cell + 1), self.col_num,  # check immediate below
+              self.row_num + (cell + 2), self.col_num,  # check cell below of that
+              "down_end", "down_mid")
+        return [left, right, up, down]
+
+
+class FireBall(pygame.sprite.Sprite):
+    def __init__(self, image_list, group, row_num, col_num, size):
+        super().__init__(group)
+        self.row_num = row_num
+        self.col_num = col_num
+
+        self.size = size
+        self.y = self.row_num * self.size + gs.Y_OFFSET
+        self.x = self.col_num * self.size
+
+        self.index = 0
+        self.anim_frame_time = 75
+        self.anim_timer = pygame.time.get_ticks()
+        self.image_list = image_list
+        self.image = self.image_list[self.index]
+        self.rect = self.image.get_rect(topleft=(self.x, self.y))
+
+        self.passable = False
+
+    def update(self):
+        self.animate()
+
+    def draw(self, window, x_offset):
+        window.blit(self.image, (self.rect.x - x_offset, self.rect.y))
+
+    def animate(self):
+        if pygame.time.get_ticks() - self.anim_timer >= self.anim_frame_time:
+            self.index += 1
+            if self.index == len(self.image_list):
+                self.kill()
+                return
+            self.image = self.image_list[self.index]
             self.anim_timer = pygame.time.get_ticks()
