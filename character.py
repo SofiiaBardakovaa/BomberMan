@@ -54,9 +54,9 @@ class Character(pygame.sprite.Sprite):
     def update(self):
         pass
 
-    def draw(self, window):
-        window.blit(self.image, self.rect)
-        pygame.draw.rect(window, gs.RED, self.rect, 1)
+    def draw(self, window, offset):
+        window.blit(self.image, (self.rect.x - offset, self.rect.y))
+        pygame.draw.rect(window, gs.RED, (self.rect.x - offset, self.rect.y, 64, 64), 1)
 
     def animate(self, action):
         """Switches between images in order to animate character"""
@@ -95,6 +95,9 @@ class Character(pygame.sprite.Sprite):
 
         self.collision_detection_items(self.GAME.groups["hard_block"])
         self.collision_detection_items(self.GAME.groups["soft_block"])
+
+        #Update the camera x pos
+        self.GAME.update_x_camera_offset_player_position(self.rect.x)
 
 
     def collision_detection_items(self, item_list):

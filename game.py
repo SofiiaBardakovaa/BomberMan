@@ -12,6 +12,9 @@ class Game:
         self.MAIN = main
         self.ASSETS = assets
 
+        #Camera offset
+        self.camera_x_offset = 0
+
         # self.player = Character(self, self.ASSETS.player_char)
 
         #Groups
@@ -48,13 +51,14 @@ class Game:
         window.fill(gs.GREY)
         for row_num, row in enumerate(self.level_matrix):
             for col_num, col in enumerate(row):
-                window.blit(self.ASSETS.background["background"][0], ((col_num * gs.SIZE), (row_num * gs.SIZE) + gs.Y_OFFSET))
+                window.blit(self.ASSETS.background["background"][0],
+                            ((col_num * gs.SIZE) - self.camera_x_offset, (row_num * gs.SIZE) + gs.Y_OFFSET))
         # self.hard_blocks.draw(window)
         # self.soft_blocks.draw(window)
         # self.player.draw(window)
         for value in self.groups.values():
             for item in value:
-                item.draw(window)
+                item.draw(window, self.camera_x_offset)
 
     def generate_level_matrix(self, rows, cols):
         """Generate the basic level matrix"""
@@ -97,3 +101,7 @@ class Game:
                     matrix[row_num][col_num] = cell
         return
 
+    def update_x_camera_offset_player_position(self, player_x_pos):
+        """Updates the camera x position per the player x position"""
+        if player_x_pos >= 576 and player_x_pos <= 1280:
+            self.camera_x_offset = player_x_pos - 576
