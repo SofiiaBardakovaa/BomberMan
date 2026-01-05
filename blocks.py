@@ -56,6 +56,18 @@ class Soft_Block(Blocks):
                     self.kill()
                 self.image = self.image_list[self.image_index]
                 self.anim_timer = pygame.time.get_ticks()
+            for enemy in self.GAME.groups["enemies"]:
+                if enemy.destroyed:
+                    continue
+                if not self.rect.colliderect(enemy):
+                    continue
+                if pygame.sprite.collide_mask(self, enemy):
+                    enemy.destroy()
+            if self.rect.colliderect(self.GAME.player):
+                if pygame.sprite.collide_mask(self, self.GAME.player):
+                    self.GAME.player.alive = False
+                    self.GAME.player.action = "dead_anim"
+
 
     def destroy_soft_block(self):
         """If soft block has been destroyed change the destroyed boolean to True and set the timer"""

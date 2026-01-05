@@ -43,13 +43,22 @@ class Character(pygame.sprite.Sprite):
             self.move("walk_down")
 
     def update(self):
-        if len(self.GAME.groups["explosions"]) > 0:
-            self.deadly_collisions(self.GAME.groups["explosions"])
+        if not self.invincibility:
+            if len(self.GAME.groups["explosions"]) > 0 and self.flame_pass == False:
+                self.deadly_collisions(self.GAME.groups["explosions"])
 
-        self.deadly_collisions(self.GAME.groups["enemies"])
+            self.deadly_collisions(self.GAME.groups["enemies"])
 
         if self.action == "dead_anim":
             self.animate(self.action)
+
+        #invincibility timer countdown
+        if not self.invincibility:
+            return
+
+        if pygame.time.get_ticks() - self.invincibility_timer >= 20000:
+            self.invincibility = False
+            self.invincibility_timer = None
 
     def draw(self, window, offset):
         window.blit(self.image, (self.rect.x - offset, self.rect.y))
@@ -94,8 +103,10 @@ class Character(pygame.sprite.Sprite):
         self.rect.topleft = (self.x, self.y)
 
         self.collision_detection_items(self.GAME.groups["hard_block"])
-        self.collision_detection_items(self.GAME.groups["soft_block"])
-        self.collision_detection_items(self.GAME.groups["bomb"])
+        if self.wall_hack == False:
+            self.collision_detection_items(self.GAME.groups["soft_block"])
+        if self.bomb_hack == False:
+            self.collision_detection_items(self.GAME.groups["bomb"])
 
         #Update the camera x pos
         self.GAME.update_x_camera_offset_player_position(self.rect.x)
@@ -168,9 +179,14 @@ class Character(pygame.sprite.Sprite):
 
         self.alive = True
         self.speed = 3
-        self.bomb_limit = 2
-        self.remote = True
-        self.power = 2
+        self.bomb_limit = 1
+        self.remote = False
+        self.power = 1
+        self.wall_hack = False
+        self.bomb_hack = False
+        self.flame_pass = False
+        self.invincibility = False
+        self.invincibility_timer = None
 
         self.action = "walk_right"
 
@@ -219,7 +235,7 @@ class Bomb(pygame.sprite.Sprite):
 
         #Bobmb attribs
         self.bomb_counter = 1
-        self.bomb_timer = 12
+        self.bomb_timer = 8
         self.passable = True
         self.remote = remote
         self.power = power
