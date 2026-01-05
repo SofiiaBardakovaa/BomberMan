@@ -4,14 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="Explosion animation">
-      <change afterPath="$PROJECT_DIR$/enemy.py" afterDir="false" />
+    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="Enemy class created">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/blocks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/character.py" beforeDir="false" afterPath="$PROJECT_DIR$/character.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamesettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/gamesettings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/enemy.py" beforeDir="false" afterPath="$PROJECT_DIR$/enemy.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +49,7 @@
     "Python.assets.executor": "Run",
     "Python.blocks.executor": "Run",
     "Python.character.executor": "Run",
+    "Python.enemy.executor": "Run",
     "Python.game.executor": "Run",
     "Python.gamesettings.executor": "Run",
     "Python.main.executor": "Run",
@@ -349,7 +345,15 @@
       <option name="project" value="LOCAL" />
       <updated>1767565931644</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Enemy class created">
+      <option name="closed" value="true" />
+      <created>1767567702101</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1767567702101</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -371,6 +375,7 @@
     <MESSAGE value="Bombs remote explosion" />
     <MESSAGE value="Bombs explosion animation" />
     <MESSAGE value="Explosion animation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Explosion animation" />
+    <MESSAGE value="Enemy class created" />
+    <option name="LAST_COMMIT_MESSAGE" value="Enemy class created" />
   </component>
 </project>
