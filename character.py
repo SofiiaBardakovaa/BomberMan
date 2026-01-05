@@ -1,6 +1,4 @@
 import pygame
-from pygame.key import get_pressed
-
 import gamesettings as gs
 
 class Character(pygame.sprite.Sprite):
@@ -13,30 +11,9 @@ class Character(pygame.sprite.Sprite):
         self.col_num = col_num
         self.size = size
 
-        # Character position
-        self.x = self.col_num * self.size
-        self.y = (self.row_num * self.size) + gs.Y_OFFSET
+        self.set_player(image_dict)
 
-        #Character attributes
-        self.alive = True
-        self.speed = 3
-        self.bomb_limit = 2
-        self.remote = True
-        self.power = 2
-
-        #Character action
-        self.action = "walk_left"
-
-        # Bombs planted
-        self.bombs_planted = 0
-
-        # Character Display
-        self.index = 0
-        self.anim_time = 50
-        self.anim_time_set = pygame.time.get_ticks()
-        self.image_dict = image_dict
-        self.image = self.image_dict[self.action][self.index]
-        self.rect = self.image.get_rect(topleft=(self.x, self.y))
+        self.lives = 3
 
     def input(self):
         for event in pygame.event.get():
@@ -66,7 +43,13 @@ class Character(pygame.sprite.Sprite):
             self.move("walk_down")
 
     def update(self):
-        pass
+        if len(self.GAME.groups["explosions"]) > 0:
+            self.deadly_collisions(self.GAME.groups["explosions"])
+
+        self.deadly_collisions(self.GAME.groups["enemies"])
+
+        if self.action == "dead_anim":
+            self.animate(self.action)
 
     def draw(self, window, offset):
         window.blit(self.image, (self.rect.x - offset, self.rect.y))
@@ -78,6 +61,9 @@ class Character(pygame.sprite.Sprite):
             self.index += 1
             if self.index == len(self.image_dict[action]):
                 self.index = 0
+                if self.action == "dead_anim":
+                    self.reset_player()
+                    return
             # self.index = self.index % len(self.image_dict[action]
 
             self.image = self.image_dict[action][self.index]
@@ -165,6 +151,57 @@ class Character(pygame.sprite.Sprite):
             self.y = top_y
         elif self.y > bottom_y:
             self.y = bottom_y
+
+    def set_player_position(self):
+        """Character position"""
+        self.x = self.col_num * self.size
+        self.y = (self.row_num * self.size) + gs.Y_OFFSET
+
+    def set_player_images(self):
+        """Character images set"""
+        self.image = self.image_dict[self.action][self.index]
+        self.rect = self.image.get_rect(topleft=(self.x, self.y))
+
+    def set_player(self, image_dict):
+        """Character starting attribs"""
+        self.set_player_position()
+
+        self.alive = True
+        self.speed = 3
+        self.bomb_limit = 2
+        self.remote = True
+        self.power = 2
+
+        self.action = "walk_right"
+
+        self.bombs_planted = 0
+
+        self.index = 0
+        self.anim_time = 50
+        self.anim_time_set = pygame.time.get_ticks()
+        self.image_dict = image_dict
+        self.set_player_images()
+
+    def reset_player(self):
+        self.lives -= 1
+        if self.lives < 0:
+            self.GAME.MAIN.run = False
+            return
+
+        self.set_player(self.image_dict)
+
+    def deadly_collisions(self, group):
+        if not self.alive:
+            return
+
+        for item in group:
+            if not self.rect.colliderect(item.rect):
+                continue
+            if pygame.sprite.collide_mask(self, item):
+                self.action = "dead_anim"
+                self.alive = False
+                return
+
 
 class Bomb(pygame.sprite.Sprite):
     def __init__(self, game, image_list, group, power, row_num, col_num, size, remote):
@@ -367,3 +404,5 @@ class FireBall(pygame.sprite.Sprite):
                 return
             self.image = self.image_list[self.index]
             self.anim_timer = pygame.time.get_ticks()
+
+
