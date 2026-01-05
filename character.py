@@ -13,6 +13,8 @@ class Character(pygame.sprite.Sprite):
 
         self.set_player(image_dict)
 
+        self.score = 0
+
         self.lives = 3
 
     def input(self):
@@ -364,6 +366,9 @@ class Explosion(pygame.sprite.Sprite):
                     valid_directions[ind] = False
                 elif self.GAME.level_matrix[dir[0]][dir[1]] in self.GAME.groups["soft_block"].sprites():
                     self.GAME.level_matrix[dir[0]][dir[1]].destroy_soft_block()
+                    valid_directions[ind] = False
+                elif self.GAME.level_matrix[dir[0]][dir[1]] in self.GAME.groups["specials"].sprites():
+                    self.GAME.level_matrix[dir[0]][dir[1]].hit_by_explosion()
                     valid_directions[ind] = False
                 else:
                     valid_directions[ind] = False

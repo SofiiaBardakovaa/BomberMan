@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="Specials appear after soft block is ruined and disappear when player collide with its center">
+    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="New stage when killed all enemies and enter the door">
+      <change afterPath="$PROJECT_DIR$/info_panel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/blocks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/character.py" beforeDir="false" afterPath="$PROJECT_DIR$/character.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamesettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/gamesettings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/specials.py" beforeDir="false" afterPath="$PROJECT_DIR$/specials.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -404,11 +406,18 @@
       <option name="project" value="LOCAL" />
       <updated>1767629631866</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="New stage when killed all enemies and enter the door">
+      <option name="closed" value="true" />
+      <created>1767635028275</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1767635028275</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Basic settings" />
     <MESSAGE value="Assets class added" />
     <MESSAGE value="Images" />
     <MESSAGE value="Game class added" />
@@ -433,6 +442,7 @@
     <MESSAGE value="Player lives and reseting" />
     <MESSAGE value="Special class created" />
     <MESSAGE value="Specials appear after soft block is ruined and disappear when player collide with its center" />
-    <option name="LAST_COMMIT_MESSAGE" value="Specials appear after soft block is ruined and disappear when player collide with its center" />
+    <MESSAGE value="New stage when killed all enemies and enter the door" />
+    <option name="LAST_COMMIT_MESSAGE" value="New stage when killed all enemies and enter the door" />
   </component>
 </project>

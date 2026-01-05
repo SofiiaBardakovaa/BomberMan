@@ -25,6 +25,15 @@ class Assets:
 
         self.specials = self.load_sprite_range(gs.SPECIALS, self.spritesheet)
 
+        self.time_word = pygame.transform.scale(self.load_sprites(self.spritesheet, 4*64, 13*64, 64*4, 64), (32*4, 32))
+
+        self.numbers_black = self.load_sprite_range(gs.NUMBERS_BLACK, self.spritesheet, resize = True)
+        self.numbers_white = self.load_sprite_range(gs.NUMBERS_WHITE, self.spritesheet, resize = True)
+
+        self.left_word = pygame.transform.scale(self.load_sprites(self.spritesheet, 0*64, 13*64, 64*4, 64), (32*4, 32))
+
+        self.score_images = self.load_sprite_range(gs.SCORE_IMAGES, self.spritesheet, 64, 64, 64, 32)
+
 
     def load_sprite_sheet(self, path, filename, width, height):
         """Load in the sprite sheet image and resize it"""

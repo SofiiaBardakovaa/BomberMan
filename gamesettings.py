@@ -8,6 +8,9 @@ FPS = 60
 # Y coordinates Offset
 Y_OFFSET = 92
 
+# level Time
+STAGE_TIME = 2000
+
 # Enemy attribs
 ENEMIES = {"ballom": {"speed": 1, "wall_hack": False, "chase_player": False, "LoS": 0, "see_player_hack": False},
            "onil": {"speed": 2, "wall_hack": False, "chase_player": True, "LoS": 4, "see_player_hack": False},
@@ -98,4 +101,29 @@ SPECIALS = {"bomb_up": [(3, 8)],
           "bomb_pass": [(4, 9)],
           "flame_pass": [(4, 10)],
           "invincible": [(4, 11)],
-          "exit": [(1, 11)],}
+          "exit": [(1, 11)]}
+SPECIAL_CONNECTIONS = {"bomb_up": "ballom",
+          "fire_up": "onil",
+          "speed_up": "dahl",
+          "wall_hack": "minvo",
+          "remote": "doria",
+          "bomb_pass": "ovape",
+          "flame_pass": "pass",
+          "invincible": "pontan",
+          "exit": "pontan"}
+TIME_WORD = {"time_word": [(13, 4)]}
+LEFT_WORD = {"left_word": [(13, 0)]}
+STAGE_WORD = {"stage_word": [(14, 0)]}
+NUMBERS_BLACK = {0: [(12, 10)], 1: [(12, 11)], 2: [(13, 8)],
+                 3: [(13, 9)], 4: [(13, 10)], 5: [(13, 11)],
+                 6: [(14, 8)], 7: [(14, 9)], 8: [(14, 10)],
+                 9: [(14, 11)]}
+NUMBERS_WHITE = {0: [(14, 5)], 1: [(14, 6)], 2: [(14, 7)],
+                 3: [(15, 5)], 4: [(15, 6)], 5: [(15, 7)],
+                 6: [(15, 8)], 7: [(15, 9)], 8: [(15, 10)],
+                 9: [(15, 11)]}
+SCORE_IMAGES = {100: [(12, 6)], 200: [(12.5, 6)], 400: [(12, 7)],
+                800: [(12.5, 7)], 1000: [(12, 8)], 2000: [(12.5, 8)],
+                4000: [(12, 9)], 8000: [(12.5, 9)]}
+SCORES = {"ballom": 100, "onil": 100, "dahl": 200, "minvo": 200,
+          "doria": 400, "ovape": 400, "pass": 800, "pontan": 800}

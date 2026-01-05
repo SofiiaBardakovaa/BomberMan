@@ -1,5 +1,6 @@
 import pygame
 from character import Character
+from info_panel import InfoPanel
 from enemy import Enemy
 from blocks import Hard_Block, Soft_Block, Special_Soft_Block
 from random import choice, randint
@@ -29,6 +30,7 @@ class Game:
         self.level = 1
         self.level_special = self.select_a_special()
         self.level_matrix = self.generate_level_matrix(gs.ROWS, gs.COLS)
+        self.level_info = InfoPanel(self, self.ASSETS)
 
 
     def input(self):
@@ -36,6 +38,9 @@ class Game:
 
 
     def update(self):
+
+        self.level_info.update()
+
         for value in self.groups.values():
             for item in value:
                 item.update()
@@ -52,6 +57,8 @@ class Game:
 
     def draw(self, window):
         window.fill(gs.GREY)
+
+        self.level_info.draw(window)
 
         for row_num, row in enumerate(self.level_matrix):
             for col_num, col in enumerate(row):
@@ -142,9 +149,9 @@ class Game:
             self.camera_x_offset = player_x_pos - 576
 
 
-    def insert_enemies_into_level(self, matrix):
+    def insert_enemies_into_level(self, matrix, enemies=None):
         """Randomly insert enemies into the level, using level matrix for valid locations"""
-        enemies_list = self.select_enemies_to_spawn()
+        enemies_list = self.select_enemies_to_spawn() if enemies is None else enemies
         print(enemies_list)
 
         pl_col = self.player.col_num
@@ -177,6 +184,7 @@ class Game:
             self.groups[key].empty()
 
         self.level_matrix.clear()
+        self.level_info.set_timer()
         self.level_matrix = self.generate_level_matrix(gs.ROWS, gs.COLS)
 
         self.camera_x_offset = 0
