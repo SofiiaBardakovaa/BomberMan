@@ -34,6 +34,8 @@ class Enemy(pygame.sprite.Sprite):
         self.index = 0
         self.action = f"walk_{self.direction}"
         self.image_dict = image_dict
+        self.anim_frame_time = 100
+        self.anim_timer = pygame.time.get_ticks()
 
         self.image = self.image_dict[self.action][self.index]
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
@@ -41,6 +43,7 @@ class Enemy(pygame.sprite.Sprite):
 
     def update(self):
         self.movement()
+        self.animate()
 
 
     def draw(self, window, x_offset):
@@ -138,3 +141,20 @@ class Enemy(pygame.sprite.Sprite):
         if len(directions) == 0:
             directions.append("left")
         return
+
+    def animate(self):
+        """Cycle through the enemy animation images"""
+        if pygame.time.get_ticks() - self.anim_timer >= self.anim_frame_time:
+            self.index += 1
+            if self.destroyed and self.index == len(self.image_dict[self.action]):
+                self.kill()
+            self.index = self.index % len(self.image_dict[self.action])
+            self.image = self.image_dict[self.action][self.index]
+            self.anim_timer = pygame.time.get_ticks()
+
+    def destroy(self):
+        """Deactivate th enemy when killed"""
+        self.destroyed = True
+        self.index = 0
+        self.action = "death"
+        self.image = self.image_dict[self.action][self.index]

@@ -2,7 +2,7 @@ import pygame
 from character import Character
 from enemy import Enemy
 from blocks import Hard_Block, Soft_Block
-from random import choice
+from random import choice, randint
 import gamesettings as gs
 
 class Game:
@@ -27,7 +27,6 @@ class Game:
                        "player": pygame.sprite.Group()}
 
         self.player = Character(self, self.ASSETS.player_char, self.groups["player"], 3, 2, gs.SIZE)
-        self.ballom_enemy = Enemy(self, self.ASSETS.ballom, self.groups["enemies"], 5, 5, gs.SIZE)
         #Level Information
         self.level = 1
         self.level_matrix = self.generate_level_matrix(gs.ROWS, gs.COLS)
@@ -50,6 +49,17 @@ class Game:
         for value in self.groups.values():
             for item in value:
                 item.update()
+
+        # perform enemy collision check with explosions only if there is an explosion
+        if self.groups["explosions"]:
+            killed_enemies = pygame.sprite.groupcollide(self.groups["explosions"],
+                                                        self.groups["enemies"], False, False)
+            if killed_enemies:
+                for flame, enemies in killed_enemies.items():
+                    for enemy in enemies:
+                        if pygame.sprite.collide_mask(flame, enemy):
+                            enemy.destroy()
+
 
     def draw(self, window):
         window.fill(gs.GREY)
@@ -74,6 +84,7 @@ class Game:
             matrix.append(line)
         self.insert_hard_blocks_into_matrix(matrix)
         self.insert_soft_blocks_into_matrix(matrix)
+        self.inser_enemies_into_level(matrix)
         for row in matrix:
             print(row)
         print()
@@ -110,3 +121,24 @@ class Game:
         """Updates the camera x position per the player x position"""
         if player_x_pos >= 576 and player_x_pos <= 1280:
             self.camera_x_offset = player_x_pos - 576
+
+    def inser_enemies_into_level(self, matrix):
+        """Randomly insert enemies onto level using level matrix for valid locations"""
+        enemies_list = ["ballom" for i in range(10)]
+        pl_col = self.player.col_num
+        pl_row = self.player.row_num
+
+        for enemy in enemies_list:
+            valid_choice = False
+            while not valid_choice:
+                row = randint(0, gs.ROWS)
+                col = randint(0, gs.COLS)
+
+                if row in [pl_row-3, pl_row-2, pl_row-1, pl_row, pl_row+1, pl_row+2, pl_row+3] and \
+                    col in [pl_col-3, pl_col-2, pl_col-1, pl_col, pl_col+1, pl_col+2, pl_col+3]:
+                    continue
+                elif matrix[row][col] == "_":
+                    valid_choice = True
+                    Enemy(self, self.ASSETS.ballom, self.groups["enemies"], row, col, gs.SIZE)
+                else:
+                    continue
