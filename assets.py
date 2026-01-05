@@ -40,6 +40,8 @@ class Assets:
         self.stage_word = pygame.transform.scale(self.load_sprites(
             self.spritesheet, 0 * 64, 14 * 64, 64 * 5, 64), (32 * 5, 32))
 
+        self.sounds = self.load_sound_effects()
+
     def load_sprite_sheet(self, path, filename, width, height):
         """Load in the sprite sheet image and resize it"""
         image = pygame.image.load(f"{path}/{filename}").convert_alpha()
@@ -71,3 +73,9 @@ class Assets:
         for ind, image, in enumerate(image_list):
             image = pygame.transform.rotate(image, rotation)
             image_list[ind] = image
+
+    def load_sound_effects(self):
+        sound_files = {}
+        for sound in gs.SOUNDS:
+            sound_files[sound] = pygame.mixer.Sound(f"sounds/{sound}")
+        return sound_files

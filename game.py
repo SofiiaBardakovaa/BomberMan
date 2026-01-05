@@ -13,9 +13,10 @@ class Game:
         self.MAIN = main
         self.ASSETS = assets
 
-        #  Camera offset
+        #  Camera Offset
         self.camera_x_offset = 0
 
+        #  Groups
         self.groups = {"hard_block": pygame.sprite.Group(),
                        "soft_block": pygame.sprite.Group(),
                        "bomb": pygame.sprite.Group(),
@@ -25,15 +26,26 @@ class Game:
                        "player": pygame.sprite.Group(),
                        "scores": pygame.sprite.Group()}
 
-        #level transition
+        #  Level Transition
         self.transition = False
         self.level_transition = None
 
-        #  Game On settings
+        #  Game On Settings
         self.game_on = False
         self.point_position = [(480, 616), (480, 674)]
         self.point_pos = 0
         self.pointer_pos = self.point_position[self.point_pos]
+
+        self.music_playing = False
+        self.start_screen_music = self.ASSETS.sounds["BM - 01 Title Screen.mp3"]
+        self.bg_music = self.ASSETS.sounds["BM - 03 Main BGM.mp3"]
+        self.bg_music_special = self.ASSETS.sounds["BM - 04 Power-Up Get.mp3"]
+        self.stage_ending_music = self.ASSETS.sounds["BM - 05 Stage Clear.mp3"]
+
+        self.start_screen_music.play(loops=-1)
+
+        self.top_score = 0
+        self.top_score_img = self.top_score_image()
 
 
     def input(self):
@@ -69,6 +81,18 @@ class Game:
             self.level_transition.update()
             return
 
+        if self.game_on == True \
+                and self.transition == False \
+                and self.music_playing == False \
+                and len(self.groups["enemies"].sprites()) > 0:
+            self.music_playing = True
+            self.bg_music.play(loops=-1)
+
+        if len(self.groups["enemies"].sprites()) == 0 and self.music_playing == True:
+            self.music_playing = False
+            self.bg_music.stop()
+            self.bg_music_special.stop()
+            self.stage_ending_music.play()
         #  Udpate the info panel
         self.level_info.update()
 
@@ -78,32 +102,43 @@ class Game:
 
         # Perform enemy collision check with explosions, only if there is an explosion
         if self.groups["explosions"]:
+            #  Compare explosions group with the enemies group, check for collisions. This will return a dictionary
+            #  keys: group 1, values: list of all group 2 that collision detection occurs
             killed_enemies = pygame.sprite.groupcollide(self.groups["explosions"], self.groups["enemies"], False, False)
             if killed_enemies:
+                #  Cycle through the dictionary, preforming checks on each enemy colliding with a flame
                 for flame, enemies in killed_enemies.items():
+                    #  Cycle through each enemy in the dictionary values(list)
                     for enemy in enemies:
                         if pygame.sprite.collide_mask(flame, enemy):
                             enemy.destroy()
 
 
     def draw(self, window):
+        #  Fill the background
         window.fill(gs.GREY)
 
         if not self.game_on:
             window.blit(self.ASSETS.start_screen, (0, 0))
             window.blit(self.ASSETS.start_screen_pointer, (self.pointer_pos))
+            if self.top_score_img:
+                for i, img in enumerate(self.top_score_img):
+                    window.blit(img, (798 + ((i - len(self.top_score_img)) * 32), 762))
             return
 
         if self.transition:
             self.level_transition.draw(window)
             return
 
+        #  Draw information panel to screen
         self.level_info.draw(window)
 
+        #  Draw the Green Background Squares
         for row_num, row in enumerate(self.level_matrix):
             for col_num, col in enumerate(row):
                 window.blit(self.ASSETS.background["background"][0],
                             ((col_num * gs.SIZE) - self.camera_x_offset, (row_num * gs.SIZE) + gs.Y_OFFSET))
+
 
         for value in self.groups.values():
             for item in value:
@@ -123,8 +158,6 @@ class Game:
         self.insert_power_up_into_matrix(matrix, self.level_special)
         self.insert_power_up_into_matrix(matrix, "exit")
         self.insert_enemies_into_level(matrix)
-        for row in matrix:
-            print(row)
         return matrix
 
 
@@ -192,7 +225,7 @@ class Game:
     def insert_enemies_into_level(self, matrix, enemies=None):
         """Randomly insert enemies into the level, using level matrix for valid locations"""
         enemies_list = self.select_enemies_to_spawn() if enemies == None else enemies
-        print(enemies_list)
+        #  Get grid coordinates of the player character
         pl_col = self.player.col_num
         pl_row = self.player.row_num
 
@@ -217,18 +250,21 @@ class Game:
 
     def regenerate_stage(self):
         """Restart a stage/level"""
+        #  Clear all objects from the various pygame groups, EXCEPT the player
         for key in self.groups.keys():
             if key == "player":
                 continue
             self.groups[key].empty()
 
+        #  Clear the level matrix
         self.level_matrix.clear()
         self.level_info.set_timer()
         self.level_matrix = self.generate_level_matrix(gs.ROWS, gs.COLS)
 
+        #  Reset the camera x Position back to zero
         self.camera_x_offset = 0
-
         self.level_transition = LevelTransition(self, self.ASSETS, self.level)
+        self.music_playing = False
 
 
     def select_enemies_to_spawn(self):
@@ -283,7 +319,7 @@ class Game:
             if self.player.bomb_limit == 10:
                 specials.remove("bomb_up")
             if self.player.power == 10:
-                specials.remove("fire_up")
+                speciasl.remove("fire_up")
             power_up = choice(specials)
         return power_up
 
@@ -295,15 +331,16 @@ class Game:
         self.player.set_player_position()
         self.player.set_player_images()
         self.regenerate_stage()
-        print(self.level)
 
 
     def new_game(self):
         for keys, values in self.groups.items():
             self.groups[keys].empty()
 
+        #  Player Character
         self.player = Character(self, self.ASSETS.player_char, self.groups["player"], 3, 2, gs.SIZE)
 
+        #  Level Information
         self.game_on = True
         self.level = 1
         self.level_special = self.select_a_special()
@@ -311,6 +348,22 @@ class Game:
         self.level_info = InfoPanel(self, self.ASSETS)
 
         self.level_transition = LevelTransition(self, self.ASSETS, self.level)
+        self.start_screen_music.stop()
+
+
+    def check_top_score(self, player_score):
+        """Check the player score against the top score."""
+        if player_score > self.top_score:
+            self.top_score = player_score
+            self.top_score_img = self.top_score_image()
+
+
+    def top_score_image(self):
+        score = [item for item in str(self.top_score)]
+        score_image = [self.ASSETS.numbers_white[int(image)][0] for image in score]
+        if self.top_score == 0:
+            score_image.append(self.ASSETS.numbers_white[0][0])
+        return score_image
 
 
 class LevelTransition(pygame.sprite.Sprite):
@@ -322,7 +375,7 @@ class LevelTransition(pygame.sprite.Sprite):
 
         self.stage_num = stage_num
 
-        self.time = 1800
+        self.time = 2800
         self.timer = pygame.time.get_ticks()
 
         self.image = self.ASSETS.stage_word
@@ -331,6 +384,7 @@ class LevelTransition(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(self.xpos, self.ypos))
 
         self.stage_num_img = self.generate_stage_number_image()
+        self.ASSETS.sounds["BM - 02 Stage Start.mp3"].play()
 
 
     def generate_stage_number_image(self):
