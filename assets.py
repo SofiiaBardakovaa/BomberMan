@@ -13,7 +13,15 @@ class Assets:
         self.explosions = self.load_sprite_range(gs.EXPLOSIONS, self.spritesheet)
         for image_list in ["right_end", "right_mid", "down_end", "down_mid"]:
             self.rotate_images_in_list(self.explosions[image_list], 180)
-        self.ballom = self.load_sprite_range(gs.BALLOM, self.spritesheet)
+        # self.ballom = self.load_sprite_range(gs.BALLOM, self.spritesheet)
+        self.enemies = {"ballom": self.load_sprite_range(gs.BALLOM, self.spritesheet),
+                        "onil": self.load_sprite_range(gs.ONIL, self.spritesheet),
+                        "dahl": self.load_sprite_range(gs.DAHL, self.spritesheet),
+                        "minvo": self.load_sprite_range(gs.MINVO, self.spritesheet),
+                        "doria": self.load_sprite_range(gs.DORIA, self.spritesheet),
+                        "ovape": self.load_sprite_range(gs.OVAPE, self.spritesheet),
+                        "pass": self.load_sprite_range(gs.PASS, self.spritesheet),
+                        "pontan": self.load_sprite_range(gs.PONTAN, self.spritesheet)}
 
 
     def load_sprite_sheet(self, path, filename, width, height):

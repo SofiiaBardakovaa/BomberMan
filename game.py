@@ -124,7 +124,7 @@ class Game:
 
     def inser_enemies_into_level(self, matrix):
         """Randomly insert enemies onto level using level matrix for valid locations"""
-        enemies_list = ["ballom" for i in range(10)]
+        enemies_list = ["pontan" for i in range(10)]
         pl_col = self.player.col_num
         pl_row = self.player.row_num
 
@@ -139,6 +139,6 @@ class Game:
                     continue
                 elif matrix[row][col] == "_":
                     valid_choice = True
-                    Enemy(self, self.ASSETS.ballom, self.groups["enemies"], row, col, gs.SIZE)
+                    Enemy(self, self.ASSETS.enemies[enemy], self.groups["enemies"], enemy, row, col, gs.SIZE)
                 else:
                     continue

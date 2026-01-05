@@ -8,6 +8,16 @@ FPS = 60
 # Y coordinates Offset
 Y_OFFSET = 92
 
+# Enemy attribs
+ENEMIES = {"ballom": {"speed": 1, "wall_hack": False, "chase_player": False, "LoS": 0, "see_player_hack": False},
+           "onil": {"speed": 2, "wall_hack": False, "chase_player": True, "LoS": 4, "see_player_hack": False},
+           "dahl": {"speed": 2, "wall_hack": False, "chase_player": False, "LoS": 0, "see_player_hack": False},
+           "minvo": {"speed": 2, "wall_hack": False, "chase_player": True, "LoS": 4, "see_player_hack": True},
+           "doria": {"speed": 0.5, "wall_hack": True, "chase_player": True, "LoS": 6, "see_player_hack": True},
+           "ovape": {"speed": 1, "wall_hack": True, "chase_player": True, "LoS": 8, "see_player_hack": False},
+           "pass": {"speed": 2, "wall_hack": True, "chase_player": True, "LoS": 12, "see_player_hack": False},
+           "pontan": {"speed": 4, "wall_hack": True, "chase_player": True, "LoS": 30, "see_player_hack": False}}
+
 # Colours
 
 BLACK = (0, 0, 0)
@@ -45,3 +55,38 @@ BALLOM = {"walk_right": [(5, 0), (5, 1), (5, 2)],
           "walk_left": [(5,3), (5, 4), (5, 5)],
           "walk_up": [(5,3), (5, 4), (5, 5)],
           "death": [(5, 6), (5, 7), (5, 8), (5, 9), (5, 10)]}
+ONIL = {"walk_right": [(8, 0), (8, 1), (8, 2)],
+          "walk_down": [(8, 0), (8, 1), (8, 2)],
+          "walk_left": [(8,3), (8, 4), (8, 5)],
+          "walk_up": [(8,3), (8, 4), (8, 5)],
+          "death": [(8, 6), (8, 7), (8, 8), (8, 9), (8, 10)]}
+DAHL = {"walk_right": [(10, 0), (10, 1), (10, 2)],
+          "walk_down": [(10, 0), (10, 1), (10, 2)],
+          "walk_left": [(10,3), (10, 4), (10, 5)],
+          "walk_up": [(10,3), (10, 4), (10, 5)],
+          "death": [(10, 6), (10, 7), (10, 8), (10, 9), (10, 10)]}
+MINVO = {"walk_right": [(6, 0), (6, 1), (6, 2)],
+          "walk_down": [(6, 0), (6, 1), (6, 2)],
+          "walk_left": [(6,3), (6, 4), (6, 5)],
+          "walk_up": [(6,3), (6, 4), (6, 5)],
+          "death": [(6, 6), (6, 7), (6, 8), (6, 9), (6, 10)]}
+DORIA = {"walk_right": [(9, 0), (9, 1), (9, 2)],
+          "walk_down": [(9, 0), (9, 1), (9, 2)],
+          "walk_left": [(9,3), (9, 4), (9, 5)],
+          "walk_up": [(9,3), (9, 4), (9, 5)],
+          "death": [(9, 6), (9, 7), (9, 8), (9, 9), (9, 10)]}
+OVAPE = {"walk_right": [(11, 0), (11, 1), (11, 2)],
+          "walk_down": [(11, 0), (11, 1), (11, 2)],
+          "walk_left": [(11,3), (11, 4), (11, 5)],
+          "walk_up": [(11,3), (11, 4), (11, 5)],
+          "death": [(11, 6), (11, 7), (11, 8), (11, 9), (11, 10)]}
+PASS = {"walk_right": [(7, 0), (7, 1), (7, 2)],
+          "walk_down": [(7, 0), (7, 1), (7, 2)],
+          "walk_left": [(7,3), (7, 4), (7, 5)],
+          "walk_up": [(7,3), (7, 4), (7, 5)],
+          "death": [(7, 6), (7, 7), (7, 8), (7, 9), (7, 10)]}
+PONTAN = {"walk_right": [(5, 11), (6, 11), (7, 11), (8,11)],
+          "walk_down": [(5, 11), (6, 11), (7, 11), (8,11)],
+          "walk_left": [(5, 11), (6, 11), (7, 11), (8,11)],
+          "walk_up": [(5, 11), (6, 11), (7, 11), (8,11)],
+          "death": [(9, 11), (5, 7), (5, 8), (5, 9), (5, 10)]}

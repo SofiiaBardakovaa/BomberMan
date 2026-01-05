@@ -4,22 +4,24 @@ from random import choice
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, game, image_dict, group, row_num, col_num, size):
+    def __init__(self, game, image_dict, group, type, row_num, col_num, size):
         super().__init__(group)
         self.GAME = game
 
-        #  Attribs
-        self.speed = 1          #  Speed of the enemy
-        self.wall_hack = False  #  Enemy can move through walls
-        self.chase_player = False   #  Enemy wil chase the player
-        self.LoS = 0            #  Distance Enemy can see player
-        self.see_player_hack = False    #  Enemy can see player through walls
+        self.type = type
 
-        #  Level matrix spawn coord
+        #  Attribs
+        self.speed = gs.ENEMIES[self.type]["speed"]        #  Speed of the enemy
+        self.wall_hack = gs.ENEMIES[self.type]["wall_hack"]  #  Enemy can move through walls
+        self.chase_player = gs.ENEMIES[self.type]["chase_player"]   #  Enemy wil chase the player
+        self.LoS = gs.ENEMIES[self.type]["LoS"] * size            #  Distance Enemy can see player
+        self.see_player_hack = gs.ENEMIES[self.type]["see_player_hack"]     #  Enemy can see player through walls
+
+        #  Level matrix spawn
         self.row = row_num
         self.col = col_num
 
-        #  Spawn
+        #  spawn
         self.size = size
         self.x = self.col * self.size
         self.y = (self.row * self.size) + gs.Y_OFFSET
@@ -40,14 +42,21 @@ class Enemy(pygame.sprite.Sprite):
         self.image = self.image_dict[self.action][self.index]
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
+        #  Enemy line of sight
+        self.start_pos = self.rect.center
+        self.end_pos = self.GAME.player.rect.center
+
 
     def update(self):
         self.movement()
+        self.update_line_of_sight_with_player()
         self.animate()
 
 
     def draw(self, window, x_offset):
         window.blit(self.image, (self.rect.x - x_offset, self.rect.y))
+        pygame.draw.line(window, "black", (self.start_pos[0] - x_offset, self.start_pos[1]),
+                         (self.end_pos[0] - x_offset, self.end_pos[1]), 2)
 
 
     def movement(self):
@@ -56,6 +65,7 @@ class Enemy(pygame.sprite.Sprite):
         if self.destroyed:
             return
 
+        #  Move enemy along the x- or y-axis, dependent on move direction
         move_direction = self.action.split("_")[1]
         if move_direction in ["left", "right"]:
             self.x += self.dir_mvmt[move_direction]
@@ -67,17 +77,32 @@ class Enemy(pygame.sprite.Sprite):
 
         self.new_direction(self.GAME.groups["hard_block"], move_direction, directions)
 
-        self.new_direction(self.GAME.groups["soft_block"], move_direction, directions)
+        if not self.wall_hack:
+            self.new_direction(self.GAME.groups["soft_block"], move_direction, directions)
 
         self.new_direction(self.GAME.groups["bomb"], move_direction, directions)
 
-        # change of dir is sufficient amount of time's elapsed
-        self.check_directions(directions)
+        # chase player is applicable
+        if self.chase_player:
+            if self.check_LoS_distance():
+                pass
+            elif self.intersecting_items_with_LoS("hard_block"):
+                pass
+            elif self.intersecting_items_with_LoS("soft_block") and self.see_player_hack == False:
+                pass
+            elif self.intersecting_items_with_LoS("bomb") and self.see_player_hack == False:
+                pass
+            else:
+                self.chase_the_player()
+
+        #  perform a change of direction if sufficient amount of time has elapsed
+        self.change_directions(directions)
 
         self.rect.update(self.x, self.y, self.size, self.size)
 
+
     def collision_detection_blocks(self, group, direction):
-        #  collision detection
+        #  Collision detection
         for block in group:
             #  compare each block for collision with enemy char rect
             if block.rect.colliderect(self.rect):
@@ -95,6 +120,7 @@ class Enemy(pygame.sprite.Sprite):
                     return direction
         return None
 
+
     def new_direction(self, group, move_direction, directions):
         dir = self.collision_detection_blocks(group, move_direction)
         if dir:
@@ -103,29 +129,34 @@ class Enemy(pygame.sprite.Sprite):
             self.action = f"walk_{new_direction}"
             self.change_dir_timer = pygame.time.get_ticks()
 
-    def check_directions(self, direction_list):
-        """Randomly change dir after a set amount of time elapsed"""
+
+    def change_directions(self, direction_list):
+        """Randomly change directions after a set amount of time elapsed"""
+        #  if timer has not elapsed return
         if pygame.time.get_ticks() - self.change_dir_timer < self.dir_time:
             return
 
+        #  if enemy coordinates do not align with the grid coordinates
         if self.x % self.size != 0 or (self.y - gs.Y_OFFSET) % self.size != 0:
             return
 
         row = int((self.y - gs.Y_OFFSET) // self.size)
         col = int(self.x // self.size)
 
-        #if cell at row\col isn't a 4 way intersection, return
+        #  if cell at row/column is not a 4 way intersection return
         if row % 2 == 0 or col % 2 == 0:
             return
 
-        self.determine_if_direction_valid(direction_list, row, col)
+        if not self.wall_hack:
+            self.determine_if_direction_valid(direction_list, row, col)
 
-        #randomly select new direction from remaining dir list
+        #  randomly select a new direction from the remaining list of directions
         new_direction = choice(direction_list)
         self.action = f"walk_{new_direction}"
 
         self.change_dir_timer = pygame.time.get_ticks()
         return
+
 
     def determine_if_direction_valid(self, directions, row, col):
         """Check the 4 directions to determine if move is possible"""
@@ -142,6 +173,7 @@ class Enemy(pygame.sprite.Sprite):
             directions.append("left")
         return
 
+
     def animate(self):
         """Cycle through the enemy animation images"""
         if pygame.time.get_ticks() - self.anim_timer >= self.anim_frame_time:
@@ -152,9 +184,52 @@ class Enemy(pygame.sprite.Sprite):
             self.image = self.image_dict[self.action][self.index]
             self.anim_timer = pygame.time.get_ticks()
 
+
     def destroy(self):
-        """Deactivate th enemy when killed"""
+        """Deactivate the enemy when killed"""
         self.destroyed = True
         self.index = 0
         self.action = "death"
         self.image = self.image_dict[self.action][self.index]
+
+
+    def update_line_of_sight_with_player(self):
+        """Update the positions of the enemy and player characters"""
+        self.start_pos = self.rect.center
+        self.end_pos = self.GAME.player.rect.center
+
+    def chase_the_player(self):
+        """Change the direction toward the player if in line of sight"""
+        enemy_col = self.start_pos[0] // self.size
+        enemy_row = self.start_pos[1] // self.size
+        player_col = self.end_pos[0] // self.size
+        player_row = self.end_pos[1] // self.size
+
+        if enemy_col > player_col and ((self.y - gs.Y_OFFSET) % self.size) + 32 == self.size // 2:
+            self.action = "walk_left"
+        elif enemy_col < player_col and ((self.y - gs.Y_OFFSET) % self.size) + 32 == self.size // 2:
+            self.action = "walk_right"
+        elif enemy_row > player_row and (self.x % self.size) + 32 == self.size // 2:
+            self.action = "walk_up"
+        elif enemy_row < player_row and (self.x % self.size) + 32 == self.size // 2:
+            self.action = "walk_down"
+
+        # update enemy change dir timer
+        self.change_dir_timer = pygame.time.get_ticks()
+
+    def check_LoS_distance(self):
+        """Return a True or False if distance between player and enemy is less than LoS attr"""
+        x_dist = abs(self.end_pos[0] - self.start_pos[0])
+        y_dist = abs(self.end_pos[1] - self.start_pos[1])
+
+        if x_dist > self.LoS or y_dist > self.LoS:
+            return True
+
+        return False
+
+    def intersecting_items_with_LoS(self, group):
+        """Return True or False if item obstructing LoS"""
+        for item in self.GAME.groups[group]:
+            if item.rect.clipline(self.start_pos, self.end_pos):
+                return True
+        return False
