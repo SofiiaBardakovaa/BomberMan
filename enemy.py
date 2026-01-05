@@ -56,8 +56,6 @@ class Enemy(pygame.sprite.Sprite):
 
     def draw(self, window, x_offset):
         window.blit(self.image, (self.rect.x - x_offset, self.rect.y))
-        pygame.draw.line(window, "black", (self.start_pos[0] - x_offset, self.start_pos[1]),
-                         (self.end_pos[0] - x_offset, self.end_pos[1]), 2)
 
 
     def movement(self):

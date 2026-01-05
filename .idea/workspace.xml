@@ -4,28 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="sounds added">
+    <list default="true" id="623531e4-b7e3-431d-8184-a33f0b29f11e" name="Changes" comment="Music added and other additional changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets.py" beforeDir="false" afterPath="$PROJECT_DIR$/assets.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blocks.py" beforeDir="false" afterPath="$PROJECT_DIR$/blocks.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/character.py" beforeDir="false" afterPath="$PROJECT_DIR$/character.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/enemy.py" beforeDir="false" afterPath="$PROJECT_DIR$/enemy.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamesettings.py" beforeDir="false" afterPath="$PROJECT_DIR$/gamesettings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/BM+-+01+Title+Screen.mp3" beforeDir="false" afterPath="$PROJECT_DIR$/sounds/BM - 01 Title Screen.mp3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/BM+-+02+Stage+Start.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/BM+-+03+Main+BGM.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/BM+-+04+Power-Up+Get.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/BM+-+05+Stage+Clear.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/BM+-+07+Special+Power-Up+Get.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/BM+-+09+Miss.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/Bomberman+SFX+(1).wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/Bomberman+SFX+(2).wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/Bomberman+SFX+(3).wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/Bomberman+SFX+(4).wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/Bomberman+SFX+(5).wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/Bomberman+SFX+(6).wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/sounds/Bomberman+SFX+(7).wav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/specials.py" beforeDir="false" afterPath="$PROJECT_DIR$/specials.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -460,11 +444,26 @@
       <option name="project" value="LOCAL" />
       <updated>1767642239344</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Music added and other additional changes">
+      <option name="closed" value="true" />
+      <created>1767645986922</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1767645986922</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Music added and other additional changes">
+      <option name="closed" value="true" />
+      <created>1767645991782</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1767645991782</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Class with basics for character created" />
     <MESSAGE value="Moving the Player Character" />
     <MESSAGE value="Character image" />
     <MESSAGE value="Character animation created" />
@@ -489,6 +488,7 @@
     <MESSAGE value="Info panel" />
     <MESSAGE value="The stage screen implemented" />
     <MESSAGE value="sounds added" />
-    <option name="LAST_COMMIT_MESSAGE" value="sounds added" />
+    <MESSAGE value="Music added and other additional changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Music added and other additional changes" />
   </component>
 </project>

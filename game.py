@@ -13,7 +13,7 @@ class Game:
         self.MAIN = main
         self.ASSETS = assets
 
-        #  Camera Offset
+        #  Camera offset
         self.camera_x_offset = 0
 
         #  Groups
@@ -26,7 +26,7 @@ class Game:
                        "player": pygame.sprite.Group(),
                        "scores": pygame.sprite.Group()}
 
-        #  Level Transition
+        #  Level transition
         self.transition = False
         self.level_transition = None
 
@@ -100,15 +100,11 @@ class Game:
             for item in value:
                 item.update()
 
-        # Perform enemy collision check with explosions, only if there is an explosion
+        # Perform enemy collision check with explosions
         if self.groups["explosions"]:
-            #  Compare explosions group with the enemies group, check for collisions. This will return a dictionary
-            #  keys: group 1, values: list of all group 2 that collision detection occurs
             killed_enemies = pygame.sprite.groupcollide(self.groups["explosions"], self.groups["enemies"], False, False)
             if killed_enemies:
-                #  Cycle through the dictionary, preforming checks on each enemy colliding with a flame
                 for flame, enemies in killed_enemies.items():
-                    #  Cycle through each enemy in the dictionary values(list)
                     for enemy in enemies:
                         if pygame.sprite.collide_mask(flame, enemy):
                             enemy.destroy()
@@ -130,10 +126,8 @@ class Game:
             self.level_transition.draw(window)
             return
 
-        #  Draw information panel to screen
         self.level_info.draw(window)
 
-        #  Draw the Green Background Squares
         for row_num, row in enumerate(self.level_matrix):
             for col_num, col in enumerate(row):
                 window.blit(self.ASSETS.background["background"][0],
@@ -225,7 +219,7 @@ class Game:
     def insert_enemies_into_level(self, matrix, enemies=None):
         """Randomly insert enemies into the level, using level matrix for valid locations"""
         enemies_list = self.select_enemies_to_spawn() if enemies == None else enemies
-        #  Get grid coordinates of the player character
+
         pl_col = self.player.col_num
         pl_row = self.player.row_num
 
@@ -250,18 +244,15 @@ class Game:
 
     def regenerate_stage(self):
         """Restart a stage/level"""
-        #  Clear all objects from the various pygame groups, EXCEPT the player
         for key in self.groups.keys():
             if key == "player":
                 continue
             self.groups[key].empty()
 
-        #  Clear the level matrix
         self.level_matrix.clear()
         self.level_info.set_timer()
         self.level_matrix = self.generate_level_matrix(gs.ROWS, gs.COLS)
 
-        #  Reset the camera x Position back to zero
         self.camera_x_offset = 0
         self.level_transition = LevelTransition(self, self.ASSETS, self.level)
         self.music_playing = False
@@ -319,7 +310,7 @@ class Game:
             if self.player.bomb_limit == 10:
                 specials.remove("bomb_up")
             if self.player.power == 10:
-                speciasl.remove("fire_up")
+                specials.remove("fire_up")
             power_up = choice(specials)
         return power_up
 

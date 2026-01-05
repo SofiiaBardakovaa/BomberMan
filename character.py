@@ -24,7 +24,7 @@ class Character(pygame.sprite.Sprite):
         self.set_player(image_dict)
 
         self.score = 0
-        self.lives = 1
+        self.lives = 3
 
 
     def input(self):
@@ -68,7 +68,7 @@ class Character(pygame.sprite.Sprite):
         if self.action == "dead_anim":
             self.animate(self.action)
 
-        #  invincibility Timer countdown
+        #  invincibility timer countdown
         if not self.invincibility:
             return
 
@@ -80,7 +80,7 @@ class Character(pygame.sprite.Sprite):
     def draw(self, window, offset):
         if self.death_sound_play == False and self.delay == False:
             window.blit(self.image, (self.rect.x - offset, self.rect.y))
-        pygame.draw.rect(window, gs.RED, (self.rect.x - offset, self.rect.y, 64, 64), 1)
+        # pygame.draw.rect(window, gs.RED, (self.rect.x - offset, self.rect.y, 64, 64), 1)
 
 
     def animate(self, action):
@@ -110,7 +110,6 @@ class Character(pygame.sprite.Sprite):
                     self.delay = True
                     self.delay_timer = pygame.time.get_ticks()
                     return
-            #  self.index = self.index % len(self.image_dics[action])
 
             self.image = self.image_dict[action][self.index]
             self.anim_time_set = pygame.time.get_ticks()
@@ -118,11 +117,9 @@ class Character(pygame.sprite.Sprite):
 
     def move(self, action):
         """Handle the movement and animations of the character"""
-        #  if player not alive, do not move
         if not self.alive:
             return
 
-        #  Check if the action is different to the current self.action, reset the index num to 0
         if action != self.action:
             self.action = action
             self.index = 0
@@ -143,16 +140,13 @@ class Character(pygame.sprite.Sprite):
                 self.GAME.ASSETS.sounds["Bomberman SFX (2).wav"].play()
             self.walk_sound_timer = pygame.time.get_ticks()
 
-        #  Call the animation method
         self.animate(action)
 
-        #  Snap the player to grid coordinates, making navigation easier
         self.snap_to_grid(action)
 
         #  Check if x, y position is iwthin game area
         self.play_area_restriction(64, (gs.COLS - 1) * 64, gs.Y_OFFSET + 64, ((gs.ROWS-1) * 64) + gs.Y_OFFSET)
 
-        #  Update the player rectangle
         self.rect.topleft = (self.x, self.y)
 
         #  Check for collision between player and various items
@@ -239,22 +233,20 @@ class Character(pygame.sprite.Sprite):
         #  Character Attributes
         self.alive = True
         self.speed = 3
-        self.bomb_limit = 2
-        self.remote = True
+        self.bomb_limit = 1
+        self.remote = False
         self.power = 1
-        self.wall_hack = True
-        self.bomb_hack = True
-        self.flame_pass = True
+        self.wall_hack = False
+        self.bomb_hack = False
+        self.flame_pass = False
         self.invincibility = False
         self.invincibility_timer = None
 
         #  Character action
         self.action = "walk_right"
 
-        #  Bombs Planted
         self.bombs_planted = 0
 
-        #  Character Display
         self.index = 0
         self.anim_time = 50
         self.anim_time_set = pygame.time.get_ticks()
@@ -445,40 +437,31 @@ class Explosion(pygame.sprite.Sprite):
         #                   left, right, up, down
         valid_directions = [True, True, True, True]
         for power_cell in range(self.power):
-            #  Get a list of the 4 directions, tuple of cell values
+
             directions = self.calculate_direction_cells(power_cell)
-            #  Check the cells in each direction per the directions list above
+
             for ind, dir in enumerate(directions):
-                #  If the corrseponding direction in valid_directions list is False, skip
+
                 if not valid_directions[ind]:
                     continue
-                #  If the current cellbeing checked is an empty cell, check the next cell in that direction
-                #  to determine type of image to display, whether it is a mid or end
+
                 if self.GAME.level_matrix[dir[0]][dir[1]] == "_":
-                    #  if the end of the power range, use the end piece
                     if power_cell == self.power - 1:
                         FireBall(self.image_dict[dir[4]], self.GAME.groups["explosions"], dir[0], dir[1], gs.SIZE)
-                    #  Check if the next cell in sequence is a barrier, use end piece if true,
-                    #  and change valid directions to False
                     elif self.GAME.level_matrix[dir[2]][dir[3]] in self.GAME.groups["hard_block"].sprites():
                         FireBall(self.image_dict[dir[4]], self.GAME.groups["explosions"], dir[0], dir[1], gs.SIZE)
                         valid_directions[ind] = False
-                    #  if next cell in sequence is not a barrier, and not the end of the flame power, use mid image
                     else:
                         FireBall(self.image_dict[dir[5]], self.GAME.groups["explosions"], dir[0], dir[1], gs.SIZE)
-                #  If the current cell being checked is not empty, but is a bomb, detonate the bomb
                 elif self.GAME.level_matrix[dir[0]][dir[1]] in self.GAME.groups["bomb"].sprites():
                     self.GAME.level_matrix[dir[0]][dir[1]].explode()
                     valid_directions[ind] = False
-                #  If the current cell being checked is not empty, but is a soft block - destroy it.
                 elif self.GAME.level_matrix[dir[0]][dir[1]] in self.GAME.groups["soft_block"].sprites():
                     self.GAME.level_matrix[dir[0]][dir[1]].destroy_soft_block()
                     valid_directions[ind] = False
-                #  If the current cell being checked is not empty, but is a special block
                 elif self.GAME.level_matrix[dir[0]][dir[1]] in self.GAME.groups["specials"].sprites():
                     self.GAME.level_matrix[dir[0]][dir[1]].hit_by_explosion()
                     valid_directions[ind] = False
-                #  If the current cell being checked is not an empty cell, or a bomb, or a soft, or a special
                 else:
                     valid_directions[ind] = False
                     continue
