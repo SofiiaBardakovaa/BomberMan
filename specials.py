@@ -19,7 +19,12 @@ class Special(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
 
     def update(self):
-        pass
+        if self.GAME.player.rect.collidepoint(self.rect.center):
+            # activate power up
+
+            self.GAME.level_matrix[self.row][self.col] = "_"
+            self.kill()
+            return
 
     def draw(self, window, x_offset):
         window.blit(self.image, (self.rect.x - x_offset, self.rect.y))

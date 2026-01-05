@@ -17,9 +17,6 @@ class BomberMan:
         self.run = True
 
     def input(self):
-        #for event in pygame.event.get():
-         #   if event.type == pygame.QUIT:
-          #      self.run = False
             self.GAME.input()
 
     def update(self):
