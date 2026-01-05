@@ -23,6 +23,8 @@ class Assets:
                         "pass": self.load_sprite_range(gs.PASS, self.spritesheet),
                         "pontan": self.load_sprite_range(gs.PONTAN, self.spritesheet)}
 
+        self.specials = self.load_sprite_range(gs.SPECIALS, self.spritesheet)
+
 
     def load_sprite_sheet(self, path, filename, width, height):
         """Load in the sprite sheet image and resize it"""
