@@ -1,5 +1,6 @@
 import pygame
 import gamesettings as gs
+from info_panel import Scoring
 
 class Special(pygame.sprite.Sprite):
     def __init__(self, game, image, name, group, row_num, col_num, size):
@@ -25,16 +26,20 @@ class Special(pygame.sprite.Sprite):
                                   "flame_pass": self.flame_pass_special, "invincible": self.invincible_special,
                                   "exit": self.end_stage}
 
+        self.score = 1000 if self.name == "exit" else 500
+
     def update(self):
         if self.GAME.player.rect.collidepoint(self.rect.center):
             # activate power up
             self.power_up_activate[self.name](self.GAME.player)
 
             if self.name == "exit":
+                self.GAME.player.update_score(self.score)
                 return
 
             self.GAME.level_matrix[self.row][self.col] = "_"
             self.kill()
+            self.GAME.player.update_score(self.score)
             return
 
     def draw(self, window, x_offset):

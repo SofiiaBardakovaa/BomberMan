@@ -1,5 +1,6 @@
 import pygame
 import gamesettings as gs
+from info_panel import Scoring
 from random import choice
 
 
@@ -180,6 +181,7 @@ class Enemy(pygame.sprite.Sprite):
             self.index += 1
             if self.destroyed and self.index == len(self.image_dict[self.action]):
                 self.kill()
+                Scoring(self.GAME, self.GAME.groups["scores"], gs.SCORES[self.type], self.x, self.y)
             self.index = self.index % len(self.image_dict[self.action])
             self.image = self.image_dict[self.action][self.index]
             self.anim_timer = pygame.time.get_ticks()

@@ -202,8 +202,9 @@ class Character(pygame.sprite.Sprite):
 
     def reset_player(self):
         self.lives -= 1
-        if self.lives == 0:
-            self.GAME.MAIN.run = False
+        if self.lives < 0:
+            self.GAME.game_on = False
+            # self.GAME.MAIN.run = False
             return
         self.GAME.regenerate_stage()
         self.set_player(self.image_dict)
@@ -220,6 +221,9 @@ class Character(pygame.sprite.Sprite):
                 self.alive = False
                 return
 
+    def update_score(self, score):
+        """update the pkayer score"""
+        self.score += score
 
 class Bomb(pygame.sprite.Sprite):
     def __init__(self, game, image_list, group, power, row_num, col_num, size, remote):

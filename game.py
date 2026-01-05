@@ -1,9 +1,9 @@
 import pygame
 from character import Character
-from info_panel import InfoPanel
 from enemy import Enemy
 from blocks import Hard_Block, Soft_Block, Special_Soft_Block
 from random import choice, randint
+from info_panel import InfoPanel
 import gamesettings as gs
 
 
@@ -13,39 +13,70 @@ class Game:
         self.MAIN = main
         self.ASSETS = assets
 
-        #  Camera Offset
+        #  Camera offset
         self.camera_x_offset = 0
 
-        #  Groups
         self.groups = {"hard_block": pygame.sprite.Group(),
                        "soft_block": pygame.sprite.Group(),
                        "bomb": pygame.sprite.Group(),
                        "specials": pygame.sprite.Group(),
                        "explosions": pygame.sprite.Group(),
                        "enemies": pygame.sprite.Group(),
-                       "player": pygame.sprite.Group()}
+                       "player": pygame.sprite.Group(),
+                       "scores": pygame.sprite.Group()}
 
-        self.player = Character(self, self.ASSETS.player_char, self.groups["player"], 3, 2, gs.SIZE)
+        #level transition
+        self.transition = False
+        self.level_transition = None
 
-        self.level = 1
-        self.level_special = self.select_a_special()
-        self.level_matrix = self.generate_level_matrix(gs.ROWS, gs.COLS)
-        self.level_info = InfoPanel(self, self.ASSETS)
+        #  Game On settings
+        self.game_on = False
+        self.point_position = [(480, 616), (480, 674)]
+        self.point_pos = 0
+        self.pointer_pos = self.point_position[self.point_pos]
 
 
     def input(self):
+        if not self.game_on:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.MAIN.run = False
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        self.point_pos -= 1
+                        if self.point_pos < 0:
+                            self.point_pos = 1
+                    if event.key == pygame.K_DOWN:
+                        self.point_pos += 1
+                        if self.point_pos > 1:
+                            self.point_pos = 0
+                    self.pointer_pos = self.point_position[self.point_pos]
+
+                    if event.key == pygame.K_RETURN:
+                        if self.point_pos == 0:
+                            self.new_game()
+            return
+
         self.player.input()
 
 
     def update(self):
+        if not self.game_on:
+            return
 
+        if self.transition:
+            self.level_transition.update()
+            return
+
+        #  Udpate the info panel
         self.level_info.update()
 
         for value in self.groups.values():
             for item in value:
                 item.update()
 
-        # Perform enemy collision check with explosions
+        # Perform enemy collision check with explosions, only if there is an explosion
         if self.groups["explosions"]:
             killed_enemies = pygame.sprite.groupcollide(self.groups["explosions"], self.groups["enemies"], False, False)
             if killed_enemies:
@@ -57,6 +88,15 @@ class Game:
 
     def draw(self, window):
         window.fill(gs.GREY)
+
+        if not self.game_on:
+            window.blit(self.ASSETS.start_screen, (0, 0))
+            window.blit(self.ASSETS.start_screen_pointer, (self.pointer_pos))
+            return
+
+        if self.transition:
+            self.level_transition.draw(window)
+            return
 
         self.level_info.draw(window)
 
@@ -89,7 +129,7 @@ class Game:
 
 
     def insert_hard_blocks_into_matrix(self, matrix):
-        """Inserts all the hard blocks into the level matrix"""
+        """Inserts all of the Hard Barrier Blocks into the level matrix"""
         for row_num, row in enumerate(matrix):
             for col_num, col in enumerate(row):
                 if row_num == 0 or row_num == len(matrix)-1 or \
@@ -151,9 +191,8 @@ class Game:
 
     def insert_enemies_into_level(self, matrix, enemies=None):
         """Randomly insert enemies into the level, using level matrix for valid locations"""
-        enemies_list = self.select_enemies_to_spawn() if enemies is None else enemies
+        enemies_list = self.select_enemies_to_spawn() if enemies == None else enemies
         print(enemies_list)
-
         pl_col = self.player.col_num
         pl_row = self.player.row_num
 
@@ -188,6 +227,8 @@ class Game:
         self.level_matrix = self.generate_level_matrix(gs.ROWS, gs.COLS)
 
         self.camera_x_offset = 0
+
+        self.level_transition = LevelTransition(self, self.ASSETS, self.level)
 
 
     def select_enemies_to_spawn(self):
@@ -246,11 +287,75 @@ class Game:
             power_up = choice(specials)
         return power_up
 
+
     def new_stage(self):
-        """Increases the stage level num and selects a new level special"""
+        """Increase the stage level number, and selects a new level special"""
         self.level += 1
         self.level_special = self.select_a_special()
         self.player.set_player_position()
         self.player.set_player_images()
         self.regenerate_stage()
         print(self.level)
+
+
+    def new_game(self):
+        for keys, values in self.groups.items():
+            self.groups[keys].empty()
+
+        self.player = Character(self, self.ASSETS.player_char, self.groups["player"], 3, 2, gs.SIZE)
+
+        self.game_on = True
+        self.level = 1
+        self.level_special = self.select_a_special()
+        self.level_matrix = self.generate_level_matrix(gs.ROWS, gs.COLS)
+        self.level_info = InfoPanel(self, self.ASSETS)
+
+        self.level_transition = LevelTransition(self, self.ASSETS, self.level)
+
+
+class LevelTransition(pygame.sprite.Sprite):
+    def __init__(self, game, assets, stage_num):
+        super().__init__()
+        self.GAME = game
+        self.GAME.transition = True
+        self.ASSETS = assets
+
+        self.stage_num = stage_num
+
+        self.time = 1800
+        self.timer = pygame.time.get_ticks()
+
+        self.image = self.ASSETS.stage_word
+        self.xpos = (gs.SCREENWIDTH // 2) - self.image.get_width() - 64
+        self.ypos = (gs.SCREENHEIGHT // 2) - self.image.get_height()
+        self.rect = self.image.get_rect(topleft=(self.xpos, self.ypos))
+
+        self.stage_num_img = self.generate_stage_number_image()
+
+
+    def generate_stage_number_image(self):
+        """Generate the image for the stage number"""
+        num_imgs = []
+        for num in str(self.stage_num):
+            num_imgs.append(self.ASSETS.numbers_white[int(num)][0])
+        return num_imgs
+
+
+    def update(self):
+        if pygame.time.get_ticks() - self.timer >= self.time:
+            self.GAME.transition = False
+            self.kill()
+
+
+    def draw(self, window):
+        window.fill((0, 0, 0))
+        window.blit(self.image, self.rect)
+        if len(self.stage_num_img) == 2:
+            for ind, img in enumerate(self.stage_num_img):
+                xpos = (gs.SCREENWIDTH//2) + 32 + (ind * 32)
+                ypos = (gs.SCREENHEIGHT // 2) - self.image.get_height()
+                window.blit(img, (xpos, ypos))
+        else:
+            xpos = (gs.SCREENWIDTH // 2) + 64
+            ypos = (gs.SCREENHEIGHT // 2) - self.image.get_height()
+            window.blit(self.stage_num_img[0], (xpos, ypos))

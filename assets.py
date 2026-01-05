@@ -34,6 +34,11 @@ class Assets:
 
         self.score_images = self.load_sprite_range(gs.SCORE_IMAGES, self.spritesheet, 64, 64, 64, 32)
 
+        self.start_screen = self.load_sprite_sheet("images", "Bomberman_start_screen.png", gs.SCREENWIDTH, gs.SCREENHEIGHT)
+        self.start_screen_pointer = self.load_sprite_sheet("images", "pointer.png",32, 32)
+
+        self.stage_word = pygame.transform.scale(self.load_sprites(
+            self.spritesheet, 0 * 64, 14 * 64, 64 * 5, 64), (32 * 5, 32))
 
     def load_sprite_sheet(self, path, filename, width, height):
         """Load in the sprite sheet image and resize it"""
