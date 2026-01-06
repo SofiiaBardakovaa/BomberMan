@@ -184,7 +184,6 @@ class Character(pygame.sprite.Sprite):
                         self.x, self.y = self.rect.topleft
                         return
 
-
     def snap_to_grid(self, action):
         """Snap the player to grid coordinates, making navigation easier"""
         x_pos = self.x % gs.SIZE
@@ -200,7 +199,6 @@ class Character(pygame.sprite.Sprite):
             if y_pos >= 52:
                 self.y = self.y + (gs.SIZE - y_pos)
 
-
     def play_area_restriction(self, left_x, right_x, top_y, bottom_y):
         """Check player coords to ensure remains within play area"""
         if self.x < left_x:
@@ -212,19 +210,16 @@ class Character(pygame.sprite.Sprite):
         elif self.y > bottom_y:
             self.y = bottom_y
 
-
     def set_player_position(self):
         """Character position"""
         #  Character position
         self.x = self.col_num * self.size
         self.y = (self.row_num * self.size) + gs.Y_OFFSET
 
-
     def set_player_images(self):
         """Character images set"""
         self.image = self.image_dict[self.action][self.index]
         self.rect = self.image.get_rect(topleft=(self.x, self.y))
-
 
     def set_player(self, image_dict):
         """Character starting attributes"""
@@ -255,7 +250,6 @@ class Character(pygame.sprite.Sprite):
 
         self.death_sound_play = False
 
-
     def reset_player(self):
         self.lives -= 1
         if self.lives < 0:
@@ -267,7 +261,6 @@ class Character(pygame.sprite.Sprite):
             return
         self.GAME.regenerate_stage()
         self.set_player(self.image_dict)
-
 
     def deadly_collisions(self, group):
         if not self.alive:
@@ -283,7 +276,6 @@ class Character(pygame.sprite.Sprite):
                 self.GAME.bg_music_special.stop()
                 self.GAME.ASSETS.sounds["Bomberman SFX (5).wav"].play()
                 return
-
 
     def update_score(self, score):
         """Update the player score"""
@@ -306,7 +298,7 @@ class Bomb(pygame.sprite.Sprite):
 
         #  Bomb Attributes
         self.bomb_counter = 1
-        self.bomb_timer = 12
+        self.bomb_timer = 8
         self.passable = True
         self.remote = remote
         self.power = power

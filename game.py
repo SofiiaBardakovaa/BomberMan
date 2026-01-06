@@ -93,6 +93,7 @@ class Game:
             self.bg_music.stop()
             self.bg_music_special.stop()
             self.stage_ending_music.play()
+
         #  Udpate the info panel
         self.level_info.update()
 
@@ -212,7 +213,7 @@ class Game:
 
     def update_x_camera_offset_player_position(self, player_x_pos):
         """Updates the camera x position per the player x position"""
-        if player_x_pos >= 576 and player_x_pos <= 1280:
+        if 576 <= player_x_pos <= 1280:
             self.camera_x_offset = player_x_pos - 576
 
 
